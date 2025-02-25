@@ -1,6 +1,10 @@
 <?php
 /**
  * ارسال خودکار اطلاعات سفارش‌های ووکامرس به تلگرام
+ * 
+ * این کد اطلاعات سفارش‌های ووکامرس را به کانال تلگرام ارسال می‌کند.
+ * شامل: نام مشتری، آدرس، کد پستی، شماره تماس، محصولات سفارش،
+ * مبلغ کل، روش پرداخت، شماره تراکنش و روش ارسال
  */
 
 // هوک برای ارسال سفارش به تلگرام پس از ثبت سفارش
@@ -51,16 +55,19 @@ function send_wc_order_status_to_telegram($order_id, $old_status, $new_status) {
  * تابع اصلی ارسال اطلاعات سفارش به تلگرام
  */
 function send_telegram_order_notification($order, $status_changed = false, $old_status = '', $new_status = '') {
-    // مقدار توکن را از تنظیمات سایت دریافت کنید
-    $bot_token = get_option('telegram_bot_token');
-    if (!$bot_token) return;
+    // توکن بات تلگرام - این مقدار را با توکن بات خود جایگزین کنید
+    $bot_token = 'YOUR_BOT_TOKEN_HERE'; 
+    
+    // آیدی کانال تلگرام - این مقدار را با آیدی کانال خود جایگزین کنید
+    $channel = '@yourchannel';
+    
+    // اگر توکن تنظیم نشده است، خارج شویم
+    if (!$bot_token || $bot_token === 'YOUR_BOT_TOKEN_HERE') return;
 
-    // برای هاست های داخل ایران لینک را تغییر دهید (مطابق توضیحات)
+    // برای هاست های داخل ایران لینک زیر را با توجه به توضیحات ریپازیتوری به لینک کلودفلر تغییر دهید
+    // https://github.com/soheylfarzane/TelegramByapss
     $api_url = 'https://api.telegram.org/bot' . $bot_token;
     
-    // تنظیم کانال تلگرام
-    $channel = '@yourchannel'; // نام کانال خود را اینجا قرار دهید
-
     // دریافت اطلاعات سفارش
     $order_id = $order->get_id();
     $order_number = $order->get_order_number();
@@ -237,52 +244,3 @@ function handle_resend_order_to_telegram() {
     }
 }
 add_action('wp_ajax_resend_order_to_telegram', 'handle_resend_order_to_telegram');
-
-/**
- * افزودن بخش تنظیمات توکن بات تلگرام در تنظیمات ووکامرس
- */
-add_filter('woocommerce_settings_tabs_array', 'add_telegram_settings_tab', 50);
-function add_telegram_settings_tab($settings_tabs) {
-    $settings_tabs['telegram_notification'] = 'اطلاع‌رسانی تلگرام';
-    return $settings_tabs;
-}
-
-add_action('woocommerce_settings_tabs_telegram_notification', 'telegram_notification_settings');
-function telegram_notification_settings() {
-    woocommerce_admin_fields(get_telegram_notification_settings());
-}
-
-add_action('woocommerce_update_options_telegram_notification', 'update_telegram_notification_settings');
-function update_telegram_notification_settings() {
-    woocommerce_update_options(get_telegram_notification_settings());
-}
-
-function get_telegram_notification_settings() {
-    $settings = array(
-        'section_title' => array(
-            'name'     => 'تنظیمات اطلاع‌رسانی تلگرام',
-            'type'     => 'title',
-            'desc'     => 'تنظیمات مربوط به ارسال اطلاعات سفارش‌های ووکامرس به تلگرام',
-            'id'       => 'telegram_notification_section_title'
-        ),
-        'bot_token' => array(
-            'name'     => 'توکن ربات تلگرام',
-            'type'     => 'text',
-            'desc'     => 'توکن ربات تلگرام خود را وارد کنید',
-            'id'       => 'telegram_bot_token'
-        ),
-        'channel_id' => array(
-            'name'     => 'آیدی کانال تلگرام',
-            'type'     => 'text',
-            'desc'     => 'آیدی کانال تلگرام را با @ وارد کنید (مثال: @yourchannel)',
-            'default'  => '@yourchannel',
-            'id'       => 'telegram_channel_id'
-        ),
-        'section_end' => array(
-            'type'     => 'sectionend',
-            'id'       => 'telegram_notification_section_end'
-        )
-    );
-    
-    return $settings;
-}
