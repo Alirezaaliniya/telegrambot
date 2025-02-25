@@ -34,7 +34,7 @@ function send_post_to_telegram($post_id) {
     }
 
     // مقدار توکن مربوط به ربات را وارد کنید
-        $bot_token = 'telegram_bot_token';
+        $bot_token = 'YOUR_BOT_TOKEN_HERE';
 
     if (!$bot_token) return;
 
