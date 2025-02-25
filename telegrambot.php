@@ -36,8 +36,6 @@ function send_post_to_telegram($post_id) {
     // مقدار توکن مربوط به ربات را وارد کنید
         $bot_token = 'YOUR_BOT_TOKEN_HERE';
 
-    if (!$bot_token) return;
-
   //برای هاست های داخل ایران لینک زیر را با توجه به توضیحات ریپازیتوری پایین به لینک کلودفلر تغییر بدید 
   //https://github.com/soheylfarzane/TelegramByapss
     $api_url = 'https://api.telegram.org/bot' . $bot_token;
