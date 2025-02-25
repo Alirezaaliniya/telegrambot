@@ -33,8 +33,9 @@ function send_post_to_telegram($post_id) {
         }
     }
 
-    // مقدار توکن را از تنظیمات سایت یا فایل کانفیگ دریافت کنید
-    $bot_token = get_option('telegram_bot_token'); 
+    // مقدار توکن مربوط به ربات را وارد کنید
+        $bot_token = 'telegram_bot_token';
+
     if (!$bot_token) return;
 
   //برای هاست های داخل ایران لینک زیر را با توجه به توضیحات ریپازیتوری پایین به لینک کلودفلر تغییر بدید 
