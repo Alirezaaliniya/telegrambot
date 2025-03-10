@@ -61,9 +61,6 @@ function send_telegram_order_notification($order, $status_changed = false, $old_
     // آیدی کانال تلگرام - این مقدار را با آیدی کانال خود جایگزین کنید
     $channel = '@yourchannel';
     
-    // اگر توکن تنظیم نشده است، خارج شویم
-    if (!$bot_token || $bot_token === 'YOUR_BOT_TOKEN_HERE') return;
-
     // برای هاست های داخل ایران لینک زیر را با توجه به توضیحات ریپازیتوری به لینک کلودفلر تغییر دهید
     // https://github.com/soheylfarzane/TelegramByapss
     $api_url = 'https://api.telegram.org/bot' . $bot_token;
